@@ -77,7 +77,11 @@ public class Sphere : MonoBehaviour, ISaveable
 
     private void FixedUpdate()
     {
-        _rigidbody.MovePosition(transform.position + movement_input * speed * Time.fixedDeltaTime);
+        // _rigidbody.MovePosition(transform.position + movement_input * speed * Time.fixedDeltaTime);
+        if (movement_input.magnitude > 0.1)
+        {
+            _rigidbody.AddForce(movement_input * speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+        }
     }
 
     #endregion Unity Lifecycle
