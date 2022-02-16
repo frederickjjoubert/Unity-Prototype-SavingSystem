@@ -21,7 +21,7 @@ public class SaveableEntity : MonoBehaviour
     {
         //Debug.Log("Capturing state for: " + GetUniqueIdentifier());
         Dictionary<string, object> state = new Dictionary<string, object>();
-        foreach (ISaveable saveable in GetComponents<ISaveable>())
+        foreach (ISaveable saveable in GetComponents<ISaveable>()) // Add all ISaveables from child components in the future?
         {
             string typeName = saveable.GetType().ToString(); // Ex. One of the saveables is going to be a 'Mover'.
             state[typeName] = saveable.CaptureState();
@@ -43,6 +43,22 @@ public class SaveableEntity : MonoBehaviour
         }
     }
 
+    #region Unity Lifecylce
+
+    private void Start()
+    {
+        SerializedObject serializedObject = new SerializedObject(this); // This monobehavior
+        SerializedProperty property = serializedObject.FindProperty("uniqueIdentifier");
+
+        if (string.IsNullOrEmpty(property.stringValue) || !IsUnique(property.stringValue))
+        {
+            property.stringValue = System.Guid.NewGuid().ToString();
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        globalIDLookup[property.stringValue] = this; // This current SaveableEntity.
+    }
+
 #if UNITY_EDITOR
     private void Update()
     {
@@ -61,6 +77,10 @@ public class SaveableEntity : MonoBehaviour
         globalIDLookup[property.stringValue] = this; // This current SaveableEntity.
     }
 #endif
+
+    #endregion Unity Lifecycle
+
+    #region Private Functions
 
     private bool IsUnique(string stringValue)
     {
@@ -81,5 +101,7 @@ public class SaveableEntity : MonoBehaviour
 
         return false;
     }
+
+    #endregion Private Functions
 
 }

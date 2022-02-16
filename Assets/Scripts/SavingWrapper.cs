@@ -5,7 +5,7 @@ using UnityEngine;
 public class SavingWrapper : MonoBehaviour
 {
 
-    const string defaultSaveFile = "Prototype_SavingSystem_SaveFile";
+    const string defaultSaveFile = "SaveFileName";
 
     private SavingSystem savingSystem;
 

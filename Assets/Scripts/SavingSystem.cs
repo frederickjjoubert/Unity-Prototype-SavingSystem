@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using UnityEngine;
@@ -11,6 +12,22 @@ public class SavingSystem : MonoBehaviour
 {
 
     BinaryFormatter binaryFormatter = new BinaryFormatter();
+
+    public static BinaryFormatter GetBinaryFormatter()
+    {
+        BinaryFormatter binaryFormatter = new BinaryFormatter();
+        SurrogateSelector surrogateSelector = new SurrogateSelector();
+
+        // Surrogates
+        Vector3SerializationSurrogate vector3SerializationSurrogate = new Vector3SerializationSurrogate();
+        QuaternionSerializationSurrogate quaternionSerializationSurrogate = new QuaternionSerializationSurrogate();
+
+        // Add Surrogates
+        surrogateSelector.AddSurrogate(typeof(Vector3), new StreamingContext(StreamingContextStates.File), vector3SerializationSurrogate);
+        surrogateSelector.AddSurrogate(typeof(Quaternion), new StreamingContext(StreamingContextStates.File), quaternionSerializationSurrogate);
+
+        return binaryFormatter;
+    }
 
     public void Save(string saveFile)
     {
@@ -71,7 +88,7 @@ public class SavingSystem : MonoBehaviour
         string path = GetPathFromSaveFile(saveFile);
         if (!File.Exists(path))
         {
-            Debug.Log("No Save File Currently Exists");
+            // Debug.Log("No Save File Currently Exists");
             return new Dictionary<string, object>();
         }
         using (FileStream fileStream = File.Open(path, FileMode.Open))
@@ -109,7 +126,18 @@ public class SavingSystem : MonoBehaviour
 
     private string GetPathFromSaveFile(string saveFile)
     {
-        return Path.Combine(Application.persistentDataPath, saveFile + ".mySaveFile");
+        // Debug.Log("Application.persistentDataPath: " + Application.persistentDataPath);
+        if (!Directory.Exists(Application.persistentDataPath + "/saves/"))
+        {
+            // Debug.Log("Directory Does Not Exist, creating Directory...");
+            Directory.CreateDirectory(Application.persistentDataPath + "/saves/");
+        }
+        // This doesn't work, only God and Microsoft know why.
+        // string path = Path.Combine(Application.persistentDataPath, "/saves/" + saveFile + ".mySaveFile"); 
+        // This works.
+        string path = Application.persistentDataPath + "/saves/" + saveFile + ".mySaveFile";
+        // Debug.Log("Path: " + path);
+        return path;
     }
 
 }

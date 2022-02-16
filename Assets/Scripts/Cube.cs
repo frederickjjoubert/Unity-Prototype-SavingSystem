@@ -10,7 +10,7 @@ public class Cube : MonoBehaviour, ISaveable
     private MeshRenderer _meshRenderer;
 
     [System.Serializable]
-    struct CubeSaveData
+    public struct CubeSaveData
     {
         public SerializableVector3 position;
         public SerializableVector3 rotation;
@@ -58,6 +58,16 @@ public class Cube : MonoBehaviour, ISaveable
             Color randomColor = new Color(r, g, b);
             _meshRenderer.material.color = randomColor;
         }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        Destroy(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("Destroy: " + gameObject.name);
     }
 
     #endregion Unity Lifecycle
