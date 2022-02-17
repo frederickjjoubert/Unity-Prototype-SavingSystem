@@ -17,8 +17,8 @@ public class Sphere : MonoBehaviour, ISaveable
     [System.Serializable]
     struct SphereSaveData
     {
-        public SerializableVector3 position;
-        public SerializableVector3 rotation;
+        public Vector3 position;
+        public Quaternion rotation;
         public SerializableColor color;
     }
 
@@ -27,8 +27,8 @@ public class Sphere : MonoBehaviour, ISaveable
     public object CaptureState()
     {
         SphereSaveData sphereSaveData = new SphereSaveData();
-        sphereSaveData.position = new SerializableVector3(transform.position);
-        sphereSaveData.rotation = new SerializableVector3(transform.eulerAngles);
+        sphereSaveData.position = transform.position;
+        sphereSaveData.rotation = transform.rotation;
         sphereSaveData.color = new SerializableColor(_meshRenderer.material.color);
         return sphereSaveData;
     }
@@ -36,13 +36,12 @@ public class Sphere : MonoBehaviour, ISaveable
     public void RestoreState(object state)
     {
         SphereSaveData sphereSaveData = (SphereSaveData)state;
-        transform.position = sphereSaveData.position.ToVector();
-        transform.eulerAngles = sphereSaveData.rotation.ToVector();
+        transform.position = sphereSaveData.position;
+        transform.eulerAngles = sphereSaveData.rotation.eulerAngles;
         _meshRenderer.material.color = sphereSaveData.color.ToColor();
     }
 
     #endregion ISaveable Conformance
-
 
     #region Unity Lifecycle
 
@@ -75,6 +74,12 @@ public class Sphere : MonoBehaviour, ISaveable
         }
     }
 
+    private void OnEnable()
+    {
+        GameController.Instance.OnBeforeStateChanged += HandleBeforeGameStateChanged;
+        GameController.Instance.OnAfterStateChanged += HandleAfterGameStateChanged;
+    }
+
     private void FixedUpdate()
     {
         // _rigidbody.MovePosition(transform.position + movement_input * speed * Time.fixedDeltaTime);
@@ -85,4 +90,29 @@ public class Sphere : MonoBehaviour, ISaveable
     }
 
     #endregion Unity Lifecycle
+
+    #region Handler Functions
+
+    private void HandleBeforeGameStateChanged(GameState gameState)
+    {
+        switch (gameState)
+        {
+            case GameState.Playing:
+                _rigidbody.velocity = Vector3.zero;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void HandleAfterGameStateChanged(GameState gameState)
+    {
+        switch (gameState)
+        {
+            default:
+                break;
+        }
+    }
+
+    #endregion Handler Functions
 }

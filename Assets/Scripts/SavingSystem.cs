@@ -23,8 +23,10 @@ public class SavingSystem : MonoBehaviour
         QuaternionSerializationSurrogate quaternionSerializationSurrogate = new QuaternionSerializationSurrogate();
 
         // Add Surrogates
-        surrogateSelector.AddSurrogate(typeof(Vector3), new StreamingContext(StreamingContextStates.File), vector3SerializationSurrogate);
-        surrogateSelector.AddSurrogate(typeof(Quaternion), new StreamingContext(StreamingContextStates.File), quaternionSerializationSurrogate);
+        surrogateSelector.AddSurrogate(typeof(Vector3), new StreamingContext(StreamingContextStates.All), vector3SerializationSurrogate);
+        surrogateSelector.AddSurrogate(typeof(Quaternion), new StreamingContext(StreamingContextStates.All), quaternionSerializationSurrogate);
+
+        binaryFormatter.SurrogateSelector = surrogateSelector;
 
         return binaryFormatter;
     }
@@ -33,6 +35,7 @@ public class SavingSystem : MonoBehaviour
     {
         Dictionary<string, object> state = LoadFile(saveFile);
         CaptureState(state);
+        DebugState(state);
         SaveFile(saveFile, state);
     }
 
@@ -43,6 +46,7 @@ public class SavingSystem : MonoBehaviour
         {
             // state = defaultState ??
         }
+        DebugState(state);
         RestoreState(state);
     }
 
@@ -76,7 +80,7 @@ public class SavingSystem : MonoBehaviour
         string path = GetPathFromSaveFile(saveFile);
         using (FileStream fileStream = File.Open(path, FileMode.Create))
         {
-            binaryFormatter.Serialize(fileStream, state);
+            GetBinaryFormatter().Serialize(fileStream, state);
             /// Always close your file stream as the OS has the file open.
             /// fileStream.Close(); 
             /// the using keyword does this for us.
@@ -93,7 +97,7 @@ public class SavingSystem : MonoBehaviour
         }
         using (FileStream fileStream = File.Open(path, FileMode.Open))
         {
-            object stateObject = binaryFormatter.Deserialize(fileStream);
+            object stateObject = GetBinaryFormatter().Deserialize(fileStream);
             Dictionary<string, object> state = (Dictionary<string, object>)stateObject;
             return state;
             /// Always close your file stream as the OS has the file open.
@@ -138,6 +142,15 @@ public class SavingSystem : MonoBehaviour
         string path = Application.persistentDataPath + "/saves/" + saveFile + ".mySaveFile";
         // Debug.Log("Path: " + path);
         return path;
+    }
+
+    private void DebugState(Dictionary<string, object> state)
+    {
+        Debug.Log("DebugState");
+        foreach (KeyValuePair<string, object> entry in state)
+        {
+            Debug.Log(entry);
+        }
     }
 
 }

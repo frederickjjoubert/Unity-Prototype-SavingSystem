@@ -3,17 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class GameController : SingletonMonobehavior<GameController>
 {
 
     #region Attributes
 
     // Events
-    public static event Action<GameState> OnBeforeStateChanged;
-    public static event Action<GameState> OnAfterStateChanged;
+    public event Action<GameState> OnBeforeStateChanged;
+    public event Action<GameState> OnAfterStateChanged;
 
     // State
     public GameState State { get; private set; }
+    [SerializeField] private StateController stateController;
 
     #endregion Attributes
 
@@ -29,12 +30,14 @@ public class GameController : MonoBehaviour
             case GameState.Starting:
                 break;
             case GameState.Loading:
+                stateController.Load();
                 break;
             case GameState.Playing:
                 break;
             case GameState.Paused:
                 break;
             case GameState.Saving:
+                stateController.Save();
                 break;
             case GameState.Quitting:
                 break;
@@ -54,6 +57,25 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         ChangeState(GameState.Starting);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            // Save
+            ChangeState(GameState.Saving);
+        }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            // Load
+            ChangeState(GameState.Loading);
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            // Delete
+            stateController.Delete();
+        }
     }
 
     #endregion Unity Lifecycle

@@ -12,8 +12,8 @@ public class Cube : MonoBehaviour, ISaveable
     [System.Serializable]
     public struct CubeSaveData
     {
-        public SerializableVector3 position;
-        public SerializableVector3 rotation;
+        public Vector3 position;
+        public Quaternion rotation;
         public SerializableColor color;
     }
 
@@ -24,8 +24,8 @@ public class Cube : MonoBehaviour, ISaveable
     public object CaptureState()
     {
         CubeSaveData cubeSaveData = new CubeSaveData();
-        cubeSaveData.position = new SerializableVector3(transform.position);
-        cubeSaveData.rotation = new SerializableVector3(transform.eulerAngles);
+        cubeSaveData.position = transform.position;
+        cubeSaveData.rotation = transform.rotation;
         cubeSaveData.color = new SerializableColor(_meshRenderer.material.color);
         return cubeSaveData;
     }
@@ -33,8 +33,8 @@ public class Cube : MonoBehaviour, ISaveable
     public void RestoreState(object state)
     {
         CubeSaveData cubeSaveData = (CubeSaveData)state;
-        transform.position = cubeSaveData.position.ToVector();
-        transform.eulerAngles = cubeSaveData.rotation.ToVector();
+        transform.position = cubeSaveData.position;
+        transform.eulerAngles = cubeSaveData.rotation.eulerAngles;
         _meshRenderer.material.color = cubeSaveData.color.ToColor();
     }
 
@@ -60,6 +60,19 @@ public class Cube : MonoBehaviour, ISaveable
         }
     }
 
+    private void OnEnable()
+    {
+        GameController.Instance.OnBeforeStateChanged += HandleBeforeGameStateChanged;
+        GameController.Instance.OnAfterStateChanged += HandleAfterGameStateChanged;
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log("OnDisable");
+        GameController.Instance.OnBeforeStateChanged -= HandleBeforeGameStateChanged;
+        GameController.Instance.OnAfterStateChanged -= HandleAfterGameStateChanged;
+    }
+
     private void OnCollisionEnter(Collision other)
     {
         Destroy(gameObject);
@@ -67,8 +80,26 @@ public class Cube : MonoBehaviour, ISaveable
 
     private void OnDestroy()
     {
-        Debug.Log("Destroy: " + gameObject.name);
+        Debug.Log("OnDestroy: " + gameObject.name);
     }
 
     #endregion Unity Lifecycle
+
+    #region Handler Functions
+
+    private void HandleBeforeGameStateChanged(GameState gameState)
+    {
+        if (gameState == GameState.Loading)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void HandleAfterGameStateChanged(GameState gameState)
+    {
+        // Do Nothing
+    }
+
+    #endregion Handler Functions
+
 }
