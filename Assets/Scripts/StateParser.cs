@@ -10,6 +10,7 @@ public class StateParser : MonoBehaviour
 
     [SerializeField] private Sphere sphere;
     [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private PersistentEntityLoader persistentEntityLoader;
 
     #endregion Attributes
 
@@ -27,13 +28,19 @@ public class StateParser : MonoBehaviour
         playerSaveData.position = sphere.gameObject.transform.position;
         stateData.playerSaveData = playerSaveData;
 
-        foreach (Cube cube in FindObjectsOfType<Cube>())
+        // foreach (Cube cube in FindObjectsOfType<Cube>())
+        // {
+        //     // state[saveableEntity.GetUniqueIdentifier()] = saveableEntity.CaptureState();
+        //     EnemySaveData enemySaveData = new EnemySaveData();
+        //     enemySaveData.uuid = System.Guid.NewGuid().ToString();
+        //     enemySaveData.position = cube.gameObject.transform.position;
+        //     stateData.enemySaveDatas.Add(enemySaveData);
+        // }
+
+        foreach (PersistentEntity persistentEntity in FindObjectsOfType<PersistentEntity>())
         {
-            // state[saveableEntity.GetUniqueIdentifier()] = saveableEntity.CaptureState();
-            EnemySaveData enemySaveData = new EnemySaveData();
-            enemySaveData.uuid = System.Guid.NewGuid().ToString();
-            enemySaveData.position = cube.gameObject.transform.position;
-            stateData.enemySaveDatas.Add(enemySaveData);
+            PersistentEntity.PersistentEntityData persistentEntityData = persistentEntity.CaptureState();
+            stateData.persistentEntityDatas.Add(persistentEntityData);
         }
 
         return stateData;
@@ -74,7 +81,9 @@ public class StateParser : MonoBehaviour
         PlayerSaveData playerSaveData = stateData.playerSaveData;
         sphere.gameObject.transform.position = playerSaveData.position;
 
-        enemySpawner.RestoreState(stateData.enemySaveDatas);
+        // enemySpawner.RestoreState(stateData.enemySaveDatas);
+        List<PersistentEntity.PersistentEntityData> persistentEntityDatas = stateData.persistentEntityDatas;
+        persistentEntityLoader.SpawnPersistentEntities(persistentEntityDatas);
     }
 
     #endregion Public Functions

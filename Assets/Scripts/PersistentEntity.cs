@@ -1,9 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PersistentEntity : MonoBehaviour
 {
+
+    [SerializeField] private string prefabName;
+
+    [Serializable]
+    public class PersistentEntityData
+    {
+        public string prefabName;
+        public Vector3 position;
+        public object data;
+    }
+
+    public PersistentEntityData CaptureState()
+    {
+        PersistentEntityData persistentEntityData = new PersistentEntityData();
+        persistentEntityData.prefabName = prefabName;
+        persistentEntityData.position = transform.position;
+        return persistentEntityData;
+    }
 
     #region Unity Lifecycle
 
