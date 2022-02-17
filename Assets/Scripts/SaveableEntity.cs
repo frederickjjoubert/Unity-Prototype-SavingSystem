@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.AI;
 
 [ExecuteAlways] // This tells Unity to execute Update in Edit Time and Run Time
 public class SaveableEntity : MonoBehaviour

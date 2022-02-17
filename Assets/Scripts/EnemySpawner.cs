@@ -26,7 +26,7 @@ public class EnemySpawner : MonoBehaviour
         Instantiate(enemyPrefab, new Vector3(randomX, 0, randomZ), Quaternion.identity);
     }
 
-    public void RestoreState(EnemySaveData[] enemySaveDatas)
+    public void RestoreState(List<EnemySaveData> enemySaveDatas)
     {
         foreach (EnemySaveData enemySaveData in enemySaveDatas)
         {

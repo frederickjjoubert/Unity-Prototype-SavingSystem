@@ -12,7 +12,7 @@ public class StateData
 
     public StateMetaData stateMetaData;
     public PlayerSaveData playerSaveData;
-    public EnemySaveData[] enemySaveDatas;
+    public List<EnemySaveData> enemySaveDatas = new List<EnemySaveData>();
 }
 
 [Serializable]

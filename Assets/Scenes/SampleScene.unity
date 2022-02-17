@@ -152,7 +152,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &233912527
 MonoBehaviour:
@@ -166,6 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d566e6e9d4574d44b6dba454c69e2e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateController: {fileID: 685421891}
 --- !u!1 &403475269
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,7 +242,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1430121345484907336, guid: a8da88e1c54ca484aa84265d3f3de844, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1430121345484907336, guid: a8da88e1c54ca484aa84265d3f3de844, type: 3}
       propertyPath: m_LocalPosition.x
@@ -305,12 +306,12 @@ GameObject:
   - component: {fileID: 596567613}
   - component: {fileID: 596567612}
   m_Layer: 0
-  m_Name: Saving
+  m_Name: SavingWrapper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &596567612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,7 +348,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &639122236
 GameObject:
@@ -491,6 +492,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 685421889}
+  - component: {fileID: 685421891}
+  - component: {fileID: 685421890}
+  - component: {fileID: 685421892}
+  - component: {fileID: 685421893}
   m_Layer: 0
   m_Name: StateController
   m_TagString: Untagged
@@ -506,12 +511,63 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 685421888}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.20088929, y: -0.88000107, z: -0.018058669}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &685421890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685421888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3d776c36361fe143a0cd779b38dcf87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &685421891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685421888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f20af86a3c011a4890978edcbbf78eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &685421892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685421888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0c14c17f4e40a48bb8aad31da32779, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sphere: {fileID: 1730117800}
+  enemySpawner: {fileID: 1555333583}
+--- !u!114 &685421893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685421888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71d5f16b1acc4af4c82a72fae4049b76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveFiles: []
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -797,10 +853,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1430121345484907348, guid: a8da88e1c54ca484aa84265d3f3de844, type: 3}
-  minX: 0
-  maxX: 0
-  minZ: 0
-  maxZ: 0
+  minX: -8
+  maxX: 8
+  minZ: -4
+  maxZ: 4
 --- !u!4 &1555333584
 Transform:
   m_ObjectHideFlags: 0
@@ -813,7 +869,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1730117794
 GameObject:
@@ -829,7 +885,6 @@ GameObject:
   - component: {fileID: 1730117795}
   - component: {fileID: 1730117801}
   - component: {fileID: 1730117800}
-  - component: {fileID: 1730117799}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -911,21 +966,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1730117799
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1730117794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7390cd30b597e4f3da9516951a3acfb4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueIdentifier: player
 --- !u!114 &1730117800
 MonoBehaviour:
   m_ObjectHideFlags: 0

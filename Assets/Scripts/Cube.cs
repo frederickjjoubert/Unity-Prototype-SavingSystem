@@ -60,19 +60,6 @@ public class Cube : MonoBehaviour, ISaveable
         }
     }
 
-    private void OnEnable()
-    {
-        GameController.Instance.OnBeforeStateChanged += HandleBeforeGameStateChanged;
-        GameController.Instance.OnAfterStateChanged += HandleAfterGameStateChanged;
-    }
-
-    private void OnDisable()
-    {
-        Debug.Log("OnDisable");
-        GameController.Instance.OnBeforeStateChanged -= HandleBeforeGameStateChanged;
-        GameController.Instance.OnAfterStateChanged -= HandleAfterGameStateChanged;
-    }
-
     private void OnCollisionEnter(Collision other)
     {
         Destroy(gameObject);
@@ -85,21 +72,6 @@ public class Cube : MonoBehaviour, ISaveable
 
     #endregion Unity Lifecycle
 
-    #region Handler Functions
 
-    private void HandleBeforeGameStateChanged(GameState gameState)
-    {
-        if (gameState == GameState.Loading)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private void HandleAfterGameStateChanged(GameState gameState)
-    {
-        // Do Nothing
-    }
-
-    #endregion Handler Functions
 
 }

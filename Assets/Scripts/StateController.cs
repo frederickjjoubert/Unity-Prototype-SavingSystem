@@ -11,6 +11,7 @@ public class StateController : SingletonMonobehavior<StateController>
 
     private JSONSaveSystem savingSystem;
     private StateParser stateParser;
+    private StateFileManager stateFileManager;
 
     // Component References
     private GameController gameController;
@@ -47,7 +48,12 @@ public class StateController : SingletonMonobehavior<StateController>
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         savingSystem = GetComponent<JSONSaveSystem>();
         stateParser = GetComponent<StateParser>();
+        stateFileManager = GetComponent<StateFileManager>();
         // StartCoroutine(LoadLastScene());
+    }
+
+    private void Start()
+    {
     }
 
     private void Update()

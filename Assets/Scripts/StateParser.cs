@@ -27,15 +27,13 @@ public class StateParser : MonoBehaviour
         playerSaveData.position = sphere.gameObject.transform.position;
         stateData.playerSaveData = playerSaveData;
 
-        Cube[] cubes = FindObjectsOfType<Cube>();
-        stateData.enemySaveDatas = new EnemySaveData[cubes.Length];
-        for (int i = 0; i < cubes.Length; i++)
+        foreach (Cube cube in FindObjectsOfType<Cube>())
         {
             // state[saveableEntity.GetUniqueIdentifier()] = saveableEntity.CaptureState();
             EnemySaveData enemySaveData = new EnemySaveData();
             enemySaveData.uuid = System.Guid.NewGuid().ToString();
-            enemySaveData.position = cubes[i].gameObject.transform.position;
-            stateData.enemySaveDatas[i] = enemySaveData;
+            enemySaveData.position = cube.gameObject.transform.position;
+            stateData.enemySaveDatas.Add(enemySaveData);
         }
 
         return stateData;
@@ -62,10 +60,9 @@ public class StateParser : MonoBehaviour
         EnemySaveData enemySaveData3 = new EnemySaveData();
         enemySaveData3.uuid = "enemy3";
         enemySaveData3.position = Vector3.one * Random.value;
-        stateData.enemySaveDatas = new EnemySaveData[3];
-        stateData.enemySaveDatas[0] = enemySaveData1;
-        stateData.enemySaveDatas[1] = enemySaveData2;
-        stateData.enemySaveDatas[2] = enemySaveData3;
+        stateData.enemySaveDatas.Add(enemySaveData1);
+        stateData.enemySaveDatas.Add(enemySaveData2);
+        stateData.enemySaveDatas.Add(enemySaveData3);
 
         return stateData;
     }
