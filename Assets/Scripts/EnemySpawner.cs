@@ -9,10 +9,10 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] private GameObject enemyPrefab;
 
-    [SerializeField] private float minX;
-    [SerializeField] private float maxX;
-    [SerializeField] private float minZ;
-    [SerializeField] private float maxZ;
+    [SerializeField] private float minX = -8;
+    [SerializeField] private float maxX = 8;
+    [SerializeField] private float minZ = -4;
+    [SerializeField] private float maxZ = 4;
 
     #endregion Attributes
 
@@ -24,6 +24,16 @@ public class EnemySpawner : MonoBehaviour
         float randomX = UnityEngine.Random.Range(minX, maxX);
         float randomZ = UnityEngine.Random.Range(minZ, maxZ);
         Instantiate(enemyPrefab, new Vector3(randomX, 0, randomZ), Quaternion.identity);
+    }
+
+    public void RestoreState(EnemySaveData[] enemySaveDatas)
+    {
+        foreach (EnemySaveData enemySaveData in enemySaveDatas)
+        {
+            float x = enemySaveData.position.x;
+            float z = enemySaveData.position.z;
+            Instantiate(enemyPrefab, new Vector3(x, 0, z), Quaternion.identity);
+        }
     }
 
     #endregion Public Functions

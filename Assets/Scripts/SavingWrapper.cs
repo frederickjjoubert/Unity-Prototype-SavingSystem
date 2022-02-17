@@ -15,11 +15,6 @@ public class SavingWrapper : MonoBehaviour
         // StartCoroutine(LoadLastScene());
     }
 
-    private IEnumerator LoadLastScene()
-    {
-        yield return savingSystem.LoadLastScene(defaultSaveFile);
-    }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.J))
@@ -48,6 +43,6 @@ public class SavingWrapper : MonoBehaviour
 
     public void Delete()
     {
-        GetComponent<SavingSystem>().Delete(defaultSaveFile);
+        savingSystem.Delete(defaultSaveFile);
     }
 }

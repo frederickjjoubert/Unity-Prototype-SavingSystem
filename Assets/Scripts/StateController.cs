@@ -9,7 +9,8 @@ public class StateController : SingletonMonobehavior<StateController>
 
     const string defaultSaveFile = "SaveFileName";
 
-    private SavingSystem savingSystem;
+    private JSONSaveSystem savingSystem;
+    private StateParser stateParser;
 
     // Component References
     private GameController gameController;
@@ -20,12 +21,15 @@ public class StateController : SingletonMonobehavior<StateController>
 
     public void Save()
     {
-        savingSystem.Save(defaultSaveFile);
+        // StateData stateData = stateParser.GenerateDummyStateData();
+        StateData stateData = stateParser.CaptureState();
+        savingSystem.Save(defaultSaveFile, stateData);
     }
 
     public void Load()
     {
-        savingSystem.Load(defaultSaveFile);
+        StateData stateData = savingSystem.Load(defaultSaveFile);
+        stateParser.RestoreState(stateData);
     }
 
     public void Delete()
@@ -41,7 +45,8 @@ public class StateController : SingletonMonobehavior<StateController>
     {
         Debug.Log("StateController Awake");
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        savingSystem = GetComponent<SavingSystem>();
+        savingSystem = GetComponent<JSONSaveSystem>();
+        stateParser = GetComponent<StateParser>();
         // StartCoroutine(LoadLastScene());
     }
 
@@ -65,10 +70,10 @@ public class StateController : SingletonMonobehavior<StateController>
 
     #region Private Functions
 
-    private IEnumerator LoadLastScene()
-    {
-        yield return savingSystem.LoadLastScene(defaultSaveFile);
-    }
+    // private IEnumerator LoadLastScene()
+    // {
+    //     yield return savingSystem.LoadLastScene(defaultSaveFile);
+    // }
 
     #endregion Private Functions
 }
