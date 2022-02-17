@@ -13,7 +13,7 @@ public class PersistentEntity : MonoBehaviour
     {
         public string prefabName;
         public Vector3 position;
-        public object data;
+        public object state;
     }
 
     public PersistentEntityData CaptureState()
@@ -21,7 +21,29 @@ public class PersistentEntity : MonoBehaviour
         PersistentEntityData persistentEntityData = new PersistentEntityData();
         persistentEntityData.prefabName = prefabName;
         persistentEntityData.position = transform.position;
+
+        Dictionary<string, object> state = new Dictionary<string, object>();
+        foreach (ISaveable saveable in GetComponents<ISaveable>()) // Add all ISaveables from child components in the future?
+        {
+            string typeName = saveable.GetType().ToString(); // Ex. One of the saveables is going to be a 'Mover'.
+            state[typeName] = saveable.CaptureState();
+        }
+        persistentEntityData.state = state;
+
         return persistentEntityData;
+    }
+
+    public void RestoreState(object state)
+    {
+        Dictionary<string, object> stateDictionary = (Dictionary<string, object>)state;
+        foreach (ISaveable saveable in GetComponents<ISaveable>())
+        {
+            string typeName = saveable.GetType().ToString(); // Ex. One of the saveables is going to be a 'Mover'.
+            if (stateDictionary.ContainsKey(typeName))
+            {
+                saveable.RestoreState(stateDictionary[typeName]);
+            }
+        }
     }
 
     #region Unity Lifecycle
