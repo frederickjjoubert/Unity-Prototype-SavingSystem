@@ -11,11 +11,9 @@ public class PersistentEntityLoader : MonoBehaviour
         {
             string path = $"Prefabs/{persistentEntityData.prefabName}";
             GameObject targetPrefab = Resources.Load<GameObject>(path);
-            float x = persistentEntityData.position.x;
-            float z = persistentEntityData.position.z;
-            GameObject instantiatedObject = Instantiate(targetPrefab, new Vector3(x, 0, z), Quaternion.identity);
+            GameObject instantiatedObject = Instantiate(targetPrefab);
             PersistentEntity persistentEntity = instantiatedObject.GetComponent<PersistentEntity>();
-            persistentEntity.RestoreState(persistentEntityData.state);
+            persistentEntity.RestoreState(persistentEntityData);
         }
     }
 }

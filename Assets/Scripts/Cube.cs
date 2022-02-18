@@ -14,28 +14,28 @@ public class Cube : MonoBehaviour, ISaveable
     {
         public Vector3 position;
         public Quaternion rotation;
-        public SerializableColor color;
+        public Color color;
     }
 
     #endregion Attributes
 
     #region ISaveable Conformance
 
-    public object CaptureState()
+    public string CaptureState()
     {
         CubeSaveData cubeSaveData = new CubeSaveData();
         cubeSaveData.position = transform.position;
         cubeSaveData.rotation = transform.rotation;
-        cubeSaveData.color = new SerializableColor(_meshRenderer.material.color);
-        return cubeSaveData;
+        cubeSaveData.color = _meshRenderer.material.color;
+        return JsonUtility.ToJson(cubeSaveData);
     }
 
-    public void RestoreState(object state)
+    public void RestoreState(string state)
     {
-        CubeSaveData cubeSaveData = (CubeSaveData)state;
+        CubeSaveData cubeSaveData = JsonUtility.FromJson<CubeSaveData>(state);
         transform.position = cubeSaveData.position;
         transform.eulerAngles = cubeSaveData.rotation.eulerAngles;
-        _meshRenderer.material.color = cubeSaveData.color.ToColor();
+        _meshRenderer.material.color = cubeSaveData.color;
     }
 
     #endregion ISaveable Conformance
@@ -63,11 +63,6 @@ public class Cube : MonoBehaviour, ISaveable
     private void OnCollisionEnter(Collision other)
     {
         Destroy(gameObject);
-    }
-
-    private void OnDestroy()
-    {
-        Debug.Log("OnDestroy: " + gameObject.name);
     }
 
     #endregion Unity Lifecycle

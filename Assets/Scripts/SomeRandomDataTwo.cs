@@ -30,7 +30,7 @@ public class SomeRandomDataTwo : MonoBehaviour, ISaveable
 
     #region Conformance to ISaveable
 
-    public object CaptureState()
+    public string CaptureState()
     {
         StatsSaveData statsSaveData = new StatsSaveData();
         statsSaveData.strength = strength;
@@ -38,13 +38,12 @@ public class SomeRandomDataTwo : MonoBehaviour, ISaveable
         statsSaveData.constitution = constitution;
         statsSaveData.wisdom = wisdom;
         statsSaveData.ego = ego;
-        return statsSaveData;
+        return JsonUtility.ToJson(statsSaveData);
     }
 
-    // Note: RestoreState is called after Awake() but before Start()
-    public void RestoreState(object state)
+    public void RestoreState(string state)
     {
-        StatsSaveData statsSaveData = (StatsSaveData)state;
+        StatsSaveData statsSaveData = JsonUtility.FromJson<StatsSaveData>(state);
         strength = statsSaveData.strength;
         agility = statsSaveData.agility;
         constitution = statsSaveData.constitution;

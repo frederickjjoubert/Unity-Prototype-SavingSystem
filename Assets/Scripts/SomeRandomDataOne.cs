@@ -16,8 +16,8 @@ public class SomeRandomDataOne : MonoBehaviour, ISaveable
     [Serializable]
     struct MoverSaveData
     {
-        public SerializableVector3 position;
-        public SerializableVector3 rotation;
+        public Vector3 position;
+        public Vector3 rotation;
         public float speed;
     }
 
@@ -25,21 +25,21 @@ public class SomeRandomDataOne : MonoBehaviour, ISaveable
 
     #region Conformance to ISaveable
 
-    public object CaptureState()
+    public string CaptureState()
     {
         MoverSaveData moverSaveData = new MoverSaveData();
-        moverSaveData.position = new SerializableVector3(transform.position);
-        moverSaveData.rotation = new SerializableVector3(transform.eulerAngles);
+        moverSaveData.position = transform.position;
+        moverSaveData.rotation = transform.eulerAngles;
         moverSaveData.speed = speed;
-        return moverSaveData;
+        return JsonUtility.ToJson(moverSaveData);
     }
 
     // Note: RestoreState is called after Awake() but before Start()
-    public void RestoreState(object state)
+    public void RestoreState(string state)
     {
-        MoverSaveData moverSaveData = (MoverSaveData)state;
-        transform.position = moverSaveData.position.ToVector();
-        transform.eulerAngles = moverSaveData.rotation.ToVector();
+        MoverSaveData moverSaveData = JsonUtility.FromJson<MoverSaveData>(state);
+        transform.position = moverSaveData.position;
+        transform.eulerAngles = moverSaveData.rotation;
         speed = moverSaveData.speed;
     }
 

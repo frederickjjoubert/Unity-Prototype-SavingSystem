@@ -37,7 +37,7 @@ public class SaveableEntity : MonoBehaviour
             string typeName = saveable.GetType().ToString(); // Ex. One of the saveables is going to be a 'Mover'.
             if (stateDictionary.ContainsKey(typeName))
             {
-                saveable.RestoreState(stateDictionary[typeName]);
+                // saveable.RestoreState(stateDictionary[typeName]);
             }
         }
     }

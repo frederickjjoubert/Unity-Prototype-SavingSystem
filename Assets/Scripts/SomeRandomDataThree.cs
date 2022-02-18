@@ -21,17 +21,17 @@ public class SomeRandomDataThree : MonoBehaviour, ISaveable
 
     #region Conformance to ISaveable
 
-    public object CaptureState()
+    public string CaptureState()
     {
         ItemsSaveData itemsSaveData = new ItemsSaveData();
         itemsSaveData.items = items;
-        return itemsSaveData;
+        return JsonUtility.ToJson(itemsSaveData);
     }
 
     // Note: RestoreState is called after Awake() but before Start()
-    public void RestoreState(object state)
+    public void RestoreState(string state)
     {
-        ItemsSaveData itemsSaveData = (ItemsSaveData)state;
+        ItemsSaveData itemsSaveData = JsonUtility.FromJson<ItemsSaveData>(state);
         items = itemsSaveData.items;
     }
 

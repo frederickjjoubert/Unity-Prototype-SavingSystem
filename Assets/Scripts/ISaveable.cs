@@ -1,5 +1,5 @@
 public interface ISaveable
 {
-    object CaptureState();
-    void RestoreState(object state);
+    string CaptureState();
+    void RestoreState(string state);
 }

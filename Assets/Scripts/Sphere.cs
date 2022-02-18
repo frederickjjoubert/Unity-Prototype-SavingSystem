@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sphere : MonoBehaviour, ISaveable
+public class Sphere : MonoBehaviour
 {
 
     [SerializeField] private float speed = 2;

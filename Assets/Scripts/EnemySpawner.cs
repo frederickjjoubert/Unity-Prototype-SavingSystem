@@ -20,10 +20,12 @@ public class EnemySpawner : MonoBehaviour
 
     public void Spawn()
     {
-        Debug.Log("Spawn");
-        float randomX = UnityEngine.Random.Range(minX, maxX);
-        float randomZ = UnityEngine.Random.Range(minZ, maxZ);
-        Instantiate(enemyPrefab, new Vector3(randomX, 0, randomZ), Quaternion.identity);
+        for (int i = 0; i < 100; i++)
+        {
+            float randomX = UnityEngine.Random.Range(minX, maxX);
+            float randomZ = UnityEngine.Random.Range(minZ, maxZ);
+            Instantiate(enemyPrefab, new Vector3(randomX, 0, randomZ), Quaternion.identity);
+        }
     }
 
     public void RestoreState(List<EnemySaveData> enemySaveDatas)

@@ -12,36 +12,48 @@ public class PersistentEntity : MonoBehaviour
     public class PersistentEntityData
     {
         public string prefabName;
-        public Vector3 position;
-        public object state;
+        public List<PersistentEntityComponentData> persistentEntityComponentDatas;
+    }
+
+    [Serializable]
+    public class PersistentEntityComponentData
+    {
+        public string name;
+        public string state;
     }
 
     public PersistentEntityData CaptureState()
     {
         PersistentEntityData persistentEntityData = new PersistentEntityData();
         persistentEntityData.prefabName = prefabName;
-        persistentEntityData.position = transform.position;
 
-        Dictionary<string, object> state = new Dictionary<string, object>();
+        List<PersistentEntityComponentData> persistentEntityComponentDatas = new List<PersistentEntityComponentData>();
+
         foreach (ISaveable saveable in GetComponents<ISaveable>()) // Add all ISaveables from child components in the future?
         {
-            string typeName = saveable.GetType().ToString(); // Ex. One of the saveables is going to be a 'Mover'.
-            state[typeName] = saveable.CaptureState();
+            PersistentEntityComponentData persistentEntityComponentData = new PersistentEntityComponentData();
+            persistentEntityComponentData.name = saveable.GetType().ToString(); // These are the Components on the GameObject
+            persistentEntityComponentData.state = saveable.CaptureState();
+            persistentEntityComponentDatas.Add(persistentEntityComponentData);
         }
-        persistentEntityData.state = state;
+        persistentEntityData.persistentEntityComponentDatas = persistentEntityComponentDatas;
 
         return persistentEntityData;
     }
 
-    public void RestoreState(object state)
+    public void RestoreState(PersistentEntityData persistentEntityData)
     {
-        Dictionary<string, object> stateDictionary = (Dictionary<string, object>)state;
         foreach (ISaveable saveable in GetComponents<ISaveable>())
         {
-            string typeName = saveable.GetType().ToString(); // Ex. One of the saveables is going to be a 'Mover'.
-            if (stateDictionary.ContainsKey(typeName))
+            string typeName = saveable.GetType().ToString(); // These are the Components on the GameObject
+
+            for (int i = 0; i < persistentEntityData.persistentEntityComponentDatas.Count; i++)
             {
-                saveable.RestoreState(stateDictionary[typeName]);
+                PersistentEntityComponentData persistentEntityComponentData = persistentEntityData.persistentEntityComponentDatas[i];
+                if (persistentEntityComponentData.name == typeName)
+                {
+                    saveable.RestoreState(persistentEntityComponentData.state);
+                }
             }
         }
     }
